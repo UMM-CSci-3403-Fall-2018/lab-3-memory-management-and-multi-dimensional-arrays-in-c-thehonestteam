@@ -2,11 +2,12 @@
 #include "mergesort.h"
 #include <stdbool.h>
 
-
+// takes an int and return if it is bigger than 2
 bool needsSorting(int rangeSize) {
   return rangeSize >= 2;
 }
 
+// takes an int array as target, an int as start index, an int and middle point, and an int and the end index. Works as partition()
 void mergeRanges(int *values, int startIndex, int midPoint, int endIndex) {
   int rangeSize = endIndex - startIndex;
   int *destination = (int*) calloc(rangeSize, sizeof(int));
@@ -34,11 +35,13 @@ void mergeRanges(int *values, int startIndex, int midPoint, int endIndex) {
     ++secondIndex;
   }
   for (int i = 0; i < rangeSize; ++i) {
-    values[i + startIndex] = destination[1];
+    values[i + startIndex] = destination[i];
   }
+  // free destination everytime the method ends
+  free(destination);
 }
 
-
+// recursive function that takes an int array, an int as start index, and an int as the end index. Recursively devides the array to half and hands over to the MergeRanges function.
 void mergesortRange(int *values, int startIndex, int endIndex) {
   int rangeSize = endIndex - startIndex;
   if (needsSorting(rangeSize)) {
@@ -49,6 +52,7 @@ void mergesortRange(int *values, int startIndex, int endIndex) {
   }
 }
 
+// execution call to our mergesort function. It takes a int as size and an int array as our target
 void mergesort(int size, int *values) {
   mergesortRange(values, 0, size);
 }  
