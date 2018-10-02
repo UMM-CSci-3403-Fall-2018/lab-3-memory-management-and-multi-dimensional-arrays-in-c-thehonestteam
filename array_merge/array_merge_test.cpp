@@ -10,6 +10,31 @@ void arrays_match(int size, int a[], int b[]) {
   }
 }
 
+int get_total_size(int, int*);
+TEST(ArrayMerge, get_total_size_test) {
+  int num_arrays = 2;
+  int sizes[] = { 10, 12 };
+  int expected = 22;
+  int result;
+  result = get_total_size(num_arrays, sizes);
+  ASSERT_EQ(result, expected);
+}
+
+int brutal_merge(int*, int, int*, int**);
+TEST(ArrayMerge, brutal_merge_test) {
+  int* output = (int*) calloc(10, sizeof(int));
+  int num_arrays = 3;
+  int size[] = {3, 3, 4};
+  int a0[] = {2, 2, 1};
+  int a1[] = {3, 3, 4, 1};
+  int* values[] = {a0 , a0, a1};
+  int expected[]  = {2, 2, 1, 2, 2, 1, 3, 3, 4, 1};
+  int result = brutal_merge(output, num_arrays, size, values); 
+  arrays_match(10, output, expected);
+  free(output);
+  ASSERT_EQ(10, result);
+}
+
 TEST(ArrayMerge, Handle_empty_list) {
   int* a[] = { };
   int sizes[] = { };
