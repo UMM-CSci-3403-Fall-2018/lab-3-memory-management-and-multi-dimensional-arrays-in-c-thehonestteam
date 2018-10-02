@@ -33,7 +33,7 @@ int* resize(int size, int* arr) {
       tmp[counter] = arr[i];
       counter++;
       break;
-    } else if (arr[i] != arr[i + 1]) {
+    }  else if (arr[i] != arr[i + 1]) {
       tmp[counter] = arr[i];
       counter++;
     }
@@ -43,6 +43,7 @@ int* resize(int size, int* arr) {
   for (int i = 0; i < counter; i++) {
     result[i + 1] = tmp[i];
   }
+  free(tmp);
   return result;
 }
  
@@ -51,6 +52,7 @@ int* array_merge(int num_array, int* sizes, int** values) {
   int tmp_size = brutal_merge(tmp, num_array, sizes, values);
   mergesort(tmp_size, tmp);
   int* result = resize(tmp_size,tmp);
+  free(tmp);
   return result;
 }
 
