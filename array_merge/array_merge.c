@@ -24,46 +24,33 @@ int brutal_merge(int* result, int num_array, int* sizes, int** values) {
   return counter;
 }
 
-int* reduce(int size, int position, int* arr) {
-  int* tmp = (int*) calloc(size - 1, sizeof(int));
-  for (int i = 0; i < position; i++) {
-    tmp[i] = arr[i];
-  }
-  for (int i = position; i < size; i++) {
-    tmp[i] = arr[i + 1];
-  }
-  return tmp;
-}
-
-int get_uniq(int size, int* arr) {
+ 
+int* resize(int size, int* arr) {
+  int* tmp = (int*) calloc(size, sizeof(int));
   int counter = 0;
-  for (int i = 1; i < size - 1; i++) {
-    if ((arr[i] = arr[i + 1])) {
-      arr = reduce(size, i, arr);
+  for (int i = 0; i < size; i++) {
+    if (size < 2) {
+      tmp[counter] = arr[i];
+      counter++;
+      break;
+    } else if (arr[i] != arr[i + 1]) {
+      tmp[counter] = arr[i];
       counter++;
     }
   }
-  return counter;
-}
- 
-int resize(int size, int *arr) {
-  int counter = 0;
-  if (size >= 2) {
-    counter += get_uniq(size, arr);
+  int* result = (int*) calloc(counter + 1, sizeof(int));
+  result[0] = counter;
+  for (int i = 0; i < counter; i++) {
+    result[i + 1] = tmp[i];
   }
-  return size - counter;
+  return result;
 }
  
 int* array_merge(int num_array, int* sizes, int** values) {
   int* tmp = (int*) calloc(get_total_size(num_array, sizes), sizeof(int));
   int tmp_size = brutal_merge(tmp, num_array, sizes, values);
   mergesort(tmp_size, tmp);
-  int new_size = resize(tmp_size,tmp);
-  int* result = (int*) calloc(new_size + 1, sizeof(int));
-  result[0] = new_size;
-  for (int i = 0; i < new_size; i++) {
-    result[i + 1] = tmp[i];
-  }
+  int* result = resize(tmp_size,tmp);
   return result;
 }
 
