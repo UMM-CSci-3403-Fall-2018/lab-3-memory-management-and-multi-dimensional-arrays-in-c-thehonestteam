@@ -1,8 +1,8 @@
 #include <stdlib.h>
 #include "array_merge.h"
-//#include "mergesort.h"
 #include <stdio.h>
 
+// main.c is used for testing valgrind function
 int main(int argc, char *argv[]) {
   int num_arrays = 10;
   int sizes[] = { 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 };

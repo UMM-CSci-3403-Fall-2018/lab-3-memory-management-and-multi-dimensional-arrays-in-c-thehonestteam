@@ -2,8 +2,12 @@
 #include "array_merge.h"
 #include <stdbool.h>
 
-void mergesort(int, int*);
+// compare function for using qsort
+int compare(const void * a, const void * b) {
+  return ( *(int*)a - *(int*)b );
+}
 
+// takes a number of total arrays and an int array of sizes, return the total size of their subarrays.
 int get_total_size(int num_arrays, int* sizes) {
   int total = 0;
   for (int i = 0; i < num_arrays; i++) {
@@ -12,6 +16,7 @@ int get_total_size(int num_arrays, int* sizes) {
   return total;
 }
 
+// takes an empty array and variables of a target array, merge all elements of the target array into the empty array.
 int brutal_merge(int* result, int num_array, int* sizes, int** values) {
   int counter = 0;
   for (int i = 0; i < num_array; i++) {
@@ -24,7 +29,7 @@ int brutal_merge(int* result, int num_array, int* sizes, int** values) {
   return counter;
 }
 
- 
+// takes an int as size and a SORTED int array. return a new array without duplicated elements. 
 int* resize(int size, int* arr) {
   int* tmp = (int*) calloc(size, sizeof(int));
   int counter = 0;
@@ -47,77 +52,24 @@ int* resize(int size, int* arr) {
   for (int i = 0; i < counter; i++) {
     result[i + 1] = tmp[i];
   }
+  // free memory of tmp if return result 
   free(tmp);
   return result;
 }
- 
+
+// execution function
+// takes a number of arrays, an int array of sizes, and an array of arrays.
+// merges the arrays into one array that has the first element as its size.
 int* array_merge(int num_array, int* sizes, int** values) {
   int* tmp = (int*) calloc(get_total_size(num_array, sizes), sizeof(int));
   int tmp_size = brutal_merge(tmp, num_array, sizes, values);
-  mergesort(tmp_size, tmp);
+  qsort(tmp, tmp_size, sizeof(int), compare);
   int* result = resize(tmp_size,tmp);
+  // free memory of tmp
   free(tmp);
   return result;
 }
 
-//////////////////////////////////////////////////////////////////////
-////////////      we add our sorting methods below    ////////////////
-
-
-// takes an int and return if it is bigger than 2
-bool needsSorting(int rangeSize) {
-  return rangeSize >= 2;
-}
-
-// takes an int array as target, an int as start index, an int and middle point, and an int and the end index. Works as partition()
-void mergeRanges(int *values, int startIndex, int midPoint, int endIndex) {
-  int rangeSize = endIndex - startIndex;
-  int *destination = (int*) calloc(rangeSize, sizeof(int));
-  int firstIndex = startIndex;
-  int secondIndex = midPoint;
-  int copyIndex = 0;
-  while (firstIndex < midPoint && secondIndex < endIndex) {
-    if (values[firstIndex] < values[secondIndex]) {
-      destination[copyIndex] = values[firstIndex];
-      ++firstIndex;
-    } else {
-      destination[copyIndex] = values[secondIndex];
-      ++secondIndex;
-    }
-    ++copyIndex;
-  }
-  while (firstIndex < midPoint) {
-    destination[copyIndex] = values[firstIndex];
-    ++copyIndex;
-    ++firstIndex;
-  }
-  while (secondIndex < endIndex) {
-    destination[copyIndex] = values[secondIndex];
-    ++copyIndex;
-    ++secondIndex;
-  }
-  for (int i = 0; i < rangeSize; ++i) {
-    values[i + startIndex] = destination[i];
-  }
-  // free destination everytime the method ends
-  free(destination);
-}
-
-// recursive function that takes an int array, an int as start index, and an int as the end index. Recursively devides the array to half and hands over to the MergeRanges function.
-void mergesortRange(int *values, int startIndex, int endIndex) {
-  int rangeSize = endIndex - startIndex;
-  if (needsSorting(rangeSize)) {
-    int midPoint = (startIndex + endIndex) / 2;
-    mergesortRange(values, startIndex, midPoint);
-    mergesortRange(values, midPoint, endIndex);
-    mergeRanges(values, startIndex, midPoint, endIndex);
-  }
-}
-
-// execution call to our mergesort function. It takes a int as size and an int array as our target
-void mergesort(int size, int *values) {
-  mergesortRange(values, 0, size);
-}  
 
 
 
