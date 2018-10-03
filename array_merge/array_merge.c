@@ -28,14 +28,18 @@ int brutal_merge(int* result, int num_array, int* sizes, int** values) {
 int* resize(int size, int* arr) {
   int* tmp = (int*) calloc(size, sizeof(int));
   int counter = 0;
-  for (int i = 0; i < size; i++) {
-    if (size < 2) {
-      tmp[counter] = arr[i];
-      counter++;
-      break;
-    }  else if (arr[i] != arr[i + 1]) {
-      tmp[counter] = arr[i];
-      counter++;
+  if (size == 0) {
+    return tmp;
+  } else if (size >= 1) {
+    tmp[0] = arr[0];
+    counter++;
+  }
+  if (size >= 2) {
+    for (int i = 1; i < size; i++) {
+      if (arr[i] != arr[i - 1]) {
+	tmp[counter] = arr[i];
+	counter++;
+      }
     }
   }
   int* result = (int*) calloc(counter + 1, sizeof(int));
