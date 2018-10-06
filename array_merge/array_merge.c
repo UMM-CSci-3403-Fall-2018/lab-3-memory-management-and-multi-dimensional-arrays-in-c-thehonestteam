@@ -34,7 +34,6 @@ int* resize(int size, int* arr) {
   int* tmp = (int*) calloc(size, sizeof(int));
   int counter = 0;
   if (size == 0) {
-    return tmp;
   } else if (size >= 1) {
     tmp[0] = arr[0];
     counter++;
